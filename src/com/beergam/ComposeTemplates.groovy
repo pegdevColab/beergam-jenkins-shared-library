@@ -18,7 +18,7 @@ class ComposeTemplates {
         script.writeFile file: composeFileName, text: composeContent
         
         // Também criar o docker-compose.yml padrão para compatibilidade
-        script.writeFile file: "docker-compose.yml", text: composeContent
+        script.writeFile file: 'docker-compose.yml', text: composeContent
     }
     
     /**
@@ -26,9 +26,9 @@ class ComposeTemplates {
      */
     static String getDockerCompose(String environment, String dockerTag) {
         switch(environment) {
-            case "production":
+            case 'production':
                 return getProductionCompose(dockerTag)
-            case "staging":
+            case 'staging':
                 return getStagingCompose(dockerTag)
             default:
                 return getDevelopmentCompose(dockerTag)
@@ -47,7 +47,7 @@ class ComposeTemplates {
     // ============================================================================
     
     private static String getProductionCompose(String dockerTag) {
-        return """
+        return '''
 
             services:
                 beergam_core:
@@ -198,7 +198,7 @@ class ComposeTemplates {
                     external: true
                 mysql_root_password:
                     external: true
-        """
+        '''
     }
     
     // ============================================================================
@@ -206,7 +206,7 @@ class ComposeTemplates {
     // ============================================================================
     
     private static String getStagingCompose(String dockerTag) {
-        return """
+        return '''
 
             services:
                 beergam_core:
@@ -271,7 +271,7 @@ class ComposeTemplates {
                     ports:
                     - "15672:15672"
                     restart: unless-stopped
-        """
+        '''
     }
     
     // ============================================================================
@@ -279,7 +279,7 @@ class ComposeTemplates {
     // ============================================================================
     
     private static String getDevelopmentCompose(String dockerTag) {
-        return """
+        return '''
             services:
                 beergam_core:
                     image: beergammaster/beergam_core:${dockerTag}
@@ -358,6 +358,6 @@ class ComposeTemplates {
                     ports:
                     - "15672:15672"
                     restart: always
-        """
+        '''
     }
 }

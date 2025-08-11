@@ -33,9 +33,9 @@ class DockerfileTemplates {
      */
     static String getCoreDockerfile(String environment) {
         switch(environment) {
-            case "production":
+            case 'production':
                 return getProductionCoreDockerfile()
-            case "staging":
+            case 'staging':
                 return getStagingCoreDockerfile()
             default:
                 return getDevelopmentCoreDockerfile()
@@ -47,9 +47,9 @@ class DockerfileTemplates {
      */
     static String getMicroserviceDockerfile(String environment, String serviceName) {
         switch(environment) {
-            case "production":
+            case 'production':
                 return getProductionMicroserviceDockerfile(serviceName)
-            case "staging":
+            case 'staging':
                 return getStagingMicroserviceDockerfile(serviceName)
             default:
                 return getDevelopmentMicroserviceDockerfile(serviceName)
@@ -61,9 +61,9 @@ class DockerfileTemplates {
      */
     static String getSocketServiceDockerfile(String environment) {
         switch(environment) {
-            case "production":
+            case 'production':
                 return getProductionSocketServiceDockerfile()
-            case "staging":
+            case 'staging':
                 return getStagingSocketServiceDockerfile()
             default:
                 return getDevelopmentSocketServiceDockerfile()
@@ -74,7 +74,7 @@ class DockerfileTemplates {
      * Lista todos os serviços disponíveis
      */
     static List getAvailableServices() {
-        return ["reports_service", "catalog_service", "orders_service", "listing_service", "ml_service"]
+        return ['reports_service', 'catalog_service', 'orders_service', 'listing_service', 'ml_service']
     }
     
     /**
@@ -89,7 +89,7 @@ class DockerfileTemplates {
     // ============================================================================
     
     private static String getProductionCoreDockerfile() {
-        return """
+        return '''
             # Dockerfile para produção - Core
             FROM python:3.11-slim as base
 
@@ -118,12 +118,12 @@ class DockerfileTemplates {
 
             # Comando de inicialização
             CMD ["python", "-m", "flask", "run", "--host=0.0.0.0", "--port=5000"]
-        """
+        '''
     }
     
     private static String getProductionMicroserviceDockerfile(String serviceName) {
-        if (serviceName == "reports_service") {
-            return """
+        if (serviceName == 'reports_service') {
+            return '''
                 # Dockerfile para reports_service em produção
                 FROM python:3.11-slim
 
@@ -136,9 +136,9 @@ class DockerfileTemplates {
 
                 EXPOSE 5000
                 CMD ["python", "app.py"]
-            """
+            '''
         } else {
-            return """
+            return '''
                 # Dockerfile para ${serviceName} em produção
                 FROM python:3.11-slim
 
@@ -151,12 +151,12 @@ class DockerfileTemplates {
 
                 EXPOSE 5000
                 CMD ["python", "app.py"]
-            """
+            '''
         }
     }
     
     private static String getProductionSocketServiceDockerfile() {
-        return """
+        return '''
             # Dockerfile para socket service em produção
             FROM node:18-alpine
 
@@ -169,7 +169,7 @@ class DockerfileTemplates {
 
             EXPOSE 3000
             CMD ["npm", "start"]
-        """
+        '''
     }
     
     // ============================================================================
@@ -177,7 +177,7 @@ class DockerfileTemplates {
     // ============================================================================
     
     private static String getStagingCoreDockerfile() {
-        return """
+        return '''
             # Dockerfile para staging - Core
             FROM python:3.11-slim
 
@@ -190,12 +190,12 @@ class DockerfileTemplates {
 
             EXPOSE 5000
             CMD ["python", "-m", "flask", "run", "--host=0.0.0.0", "--port=5000"]
-        """
+        '''
     }
     
     private static String getStagingMicroserviceDockerfile(String serviceName) {
-        if (serviceName == "reports_service") {
-            return """
+        if (serviceName == 'reports_service') {
+            return '''
                 # Dockerfile para reports_service em staging
                 FROM python:3.11-slim
 
@@ -208,9 +208,9 @@ class DockerfileTemplates {
 
                 EXPOSE 5000
                 CMD ["python", "app.py"]
-            """
+            '''
         } else {
-            return """
+            return '''
                 # Dockerfile para ${serviceName} em staging
                 FROM python:3.11-slim
 
@@ -223,12 +223,12 @@ class DockerfileTemplates {
 
                 EXPOSE 5000
                 CMD ["python", "app.py"]
-            """
+            '''
         }
     }
     
     private static String getStagingSocketServiceDockerfile() {
-        return """
+        return '''
             # Dockerfile para socket service em staging
             FROM node:18-alpine
 
@@ -241,7 +241,7 @@ class DockerfileTemplates {
 
             EXPOSE 3000
             CMD ["npm", "start"]
-        """
+        '''
     }
     
     // ============================================================================
@@ -249,7 +249,7 @@ class DockerfileTemplates {
     // ============================================================================
     
     private static String getDevelopmentCoreDockerfile() {
-        return """
+        return '''
             # Dockerfile para desenvolvimento - Core
             FROM python:3.11-slim
 
@@ -262,12 +262,12 @@ class DockerfileTemplates {
 
             EXPOSE 5000
             CMD ["python", "-m", "flask", "run", "--host=0.0.0.0", "--port=5000", "--debug"]
-        """
+        '''
     }
     
     private static String getDevelopmentMicroserviceDockerfile(String serviceName) {
-        if (serviceName == "reports_service") {
-            return """
+        if (serviceName == 'reports_service') {
+            return '''
                 # Dockerfile para reports_service em desenvolvimento
                 FROM python:3.11-slim
 
@@ -280,9 +280,9 @@ class DockerfileTemplates {
 
                 EXPOSE 5000
                 CMD ["python", "app.py"]
-            """
+            '''
         } else {
-            return """
+            return '''
                 # Dockerfile para ${serviceName} em desenvolvimento
                 FROM python:3.11-slim
 
@@ -295,12 +295,12 @@ class DockerfileTemplates {
 
                 EXPOSE 5000
                 CMD ["python", "app.py"]
-            """
+            '''
         }
     }
     
     private static String getDevelopmentSocketServiceDockerfile() {
-        return """
+        return '''
             # Dockerfile para socket service em desenvolvimento
             FROM node:18-alpine
 
@@ -313,6 +313,6 @@ class DockerfileTemplates {
 
             EXPOSE 3000
             CMD ["npm", "run", "dev"]
-        """
+        '''
     }
 }
