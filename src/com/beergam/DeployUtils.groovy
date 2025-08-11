@@ -10,10 +10,10 @@ class DeployUtils {
      */
     static void deployToEnvironment(String environment, String dockerTag) {
         switch(environment) {
-            case 'production':
+            case "production":
                 deployToProduction()
                 break
-            case 'staging':
+            case "staging":
                 deployToStaging()
                 break
             default:
@@ -30,7 +30,7 @@ class DeployUtils {
         
         script.echo "Executando deploy para PRODUÇÃO..."
         
-        script.sh '''
+        script.sh """
             set -e
             set +x
             
@@ -60,8 +60,8 @@ class DeployUtils {
             # Rede + secrets
             sshpass -p ${VPS_PASSWORD} ssh -o StrictHostKeyChecking=no root@89.116.74.23 "
                 docker network create beergam_net || true
-                echo -n '${MYSQL_PASSWORD}' | docker secret create mysql_password - 2>/dev/null || true
-                echo -n '${MYSQL_PASSWORD}' | docker secret create mysql_root_password - 2>/dev/null || true
+                echo -n "${MYSQL_PASSWORD}" | docker secret create mysql_password - 2>/dev/null || true
+                echo -n "${MYSQL_PASSWORD}" | docker secret create mysql_root_password - 2>/dev/null || true
             "
             
             # Pull de imagens
@@ -84,7 +84,7 @@ class DeployUtils {
             "
             
             # Espera pelo MySQL no Swarm
-            sshpass -p ${VPS_PASSWORD} ssh -o StrictHostKeyChecking=no root@89.116.74.23 '
+            sshpass -p ${VPS_PASSWORD} ssh -o StrictHostKeyChecking=no root@89.116.74.23 "
                 set -e
                 echo "Aguardando MySQL (até 2 minutos)..."
                 for i in $(seq 1 24); do
@@ -101,7 +101,7 @@ class DeployUtils {
                   sleep 5
                   if [ $i -eq 24 ]; then echo "MySQL não respondeu a tempo"; exit 1; fi
                 done
-            '
+            "
             
             # Migrações usando container efêmero
             sshpass -p ${VPS_PASSWORD} ssh -o StrictHostKeyChecking=no root@89.116.74.23 "
@@ -113,7 +113,7 @@ class DeployUtils {
             
             echo "Deploy em produção finalizado com sucesso!"
             set -x
-        '''
+        """
     }
     
     /**
@@ -126,7 +126,7 @@ class DeployUtils {
         
         // TODO: Implementar lógica específica para staging
         // Por enquanto, apenas exibe o docker-compose gerado
-        script.sh '''
+        script.sh """
             echo "========================================"
             echo "Docker Compose para STAGING:"
             echo "========================================"
@@ -135,7 +135,7 @@ class DeployUtils {
             echo "Fim do docker-compose.staging.yml"
             echo "========================================"
             echo "Deploy para staging será implementado em breve!"
-        '''
+        """
     }
     
     /**
@@ -146,7 +146,7 @@ class DeployUtils {
         
         script.echo "Executando deploy para DESENVOLVIMENTO..."
         
-        script.sh '''
+        script.sh """
             echo "========================================"
             echo "Docker Compose para ambiente de desenvolvimento:"
             echo "========================================"
@@ -155,7 +155,7 @@ class DeployUtils {
             echo "Fim do docker-compose.dev.yml"
             echo "========================================"
             echo "Para executar: docker-compose -f docker-compose.dev.yml up -d"
-        '''
+        """
     }
     
     /**
@@ -163,8 +163,8 @@ class DeployUtils {
      */
     static void cleanup() {
         def script = new org.jenkinsci.plugins.workflow.cps.CpsScript()
-        script.sh 'docker logout'
-        script.sh 'docker image prune -f'
+        script.sh "docker logout"
+        script.sh "docker image prune -f"
     }
     
     /**
@@ -195,20 +195,20 @@ class DeployUtils {
         
         script.echo "Executando rollback de produção..."
         
-        script.sh '''
+        script.sh """
             set -e
             set +x
             sshpass -p ${VPS_PASSWORD} ssh -o StrictHostKeyChecking=no root@89.116.74.23 "
                 if [ -d /home/Beergam_project_test/Beergam_project_backup ]; then
                     rm -rf /home/Beergam_project_test/Beergam_project
                     mv /home/Beergam_project_test/Beergam_project_backup /home/Beergam_project_test/Beergam_project
-                    echo 'Backup restaurado com sucesso!'
+                    echo "Backup restaurado com sucesso!"
                     docker stack deploy --with-registry-auth -c /home/Beergam_project_test/Beergam_project/docker-compose.yml Beergam-production
                 else
-                    echo 'Nenhum backup encontrado para restaurar.'
+                    echo "Nenhum backup encontrado para restaurar."
                 fi
             "
             set -x
-        '''
+        """
     }
 }
